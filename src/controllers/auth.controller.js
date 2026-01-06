@@ -11,7 +11,7 @@ class AuthController {
         maxAge: 30 * 24 * 60 * 60 * 1000
       });
 
-      res.status(201).json(data);
+      res.status(201).json({ accessToken: data.accessToken });
     } catch (error) {
       next(error);
     }
@@ -27,7 +27,7 @@ class AuthController {
         maxAge: 30 * 24 * 60 * 60 * 1000
       });
 
-      res.status(200).json(data);
+      res.status(200).json({ accessToken: data.accessToken });
     } catch (error) {
       next(error);
     }
@@ -54,7 +54,7 @@ class AuthController {
         maxAge: 30 * 24 * 60 * 60 * 1000
       });
 
-      res.status(200).json(data);
+      res.status(200).json({ accessToken: data.accessToken });
     } catch (error) {
       next(error);
     }
