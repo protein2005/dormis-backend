@@ -44,8 +44,20 @@ class AuthController {
     }
   }
 
-  getAllUsers(req, res) {
-    res.json([{ id: 1, name: 'John Doe' }, { id: 2, name: 'Jane Smith' }]);
+  async refresh(req, res, next) {
+    try {
+      const { refreshToken } = req.cookies;
+      const data = await AuthService.refresh(refreshToken);
+
+      res.cookie('refreshToken', data.refreshToken, {
+        httpOnly: true,
+        maxAge: 30 * 24 * 60 * 60 * 1000
+      });
+
+      res.status(200).json(data);
+    } catch (error) {
+      next(error);
+    }
   }
 }
 

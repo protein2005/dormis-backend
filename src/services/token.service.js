@@ -18,6 +18,29 @@ class TokenService {
     return token;
   }
 
+  validateAccessToken(token) {
+    try {
+      const userData = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+      return userData;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  validateRefreshToken(token) {
+    try {
+      const userData = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
+      return userData;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  async findToken(refreshToken) {
+    const tokenData = await TokenModel.findOne({ refreshToken });
+    return tokenData;
+  }
+
   async removeToken(refreshToken) {
     await TokenModel.deleteOne({ refreshToken });
     return null;

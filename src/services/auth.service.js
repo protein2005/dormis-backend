@@ -50,6 +50,25 @@ class AuthService {
 
     await TokenService.removeToken(refreshToken);
   }
+
+  async refresh(refreshToken) {
+    if (!refreshToken) {
+      throw ApiError.Unauthorized();
+    }
+
+    const userData = TokenService.validateRefreshToken(refreshToken);
+    const tokenFromDb = await TokenService.findToken(refreshToken);
+
+    if (!userData || !tokenFromDb) {
+      throw ApiError.Unauthorized();
+    }
+
+    const user = await UserModel.findById(userData.id);
+    const userDto = new UserDto(user);
+    const tokens = TokenService.generateTokens({ ...userDto });
+    await TokenService.saveToken(userDto.id, tokens.refreshToken);
+    return { ...tokens };
+  }
 }
 
 module.exports = new AuthService();
