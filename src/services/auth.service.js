@@ -31,6 +31,10 @@ class AuthService {
       throw ApiError.BadRequest('Користувача не знайдено');
     }
 
+    if (!user.password) {
+      throw ApiError.BadRequest('Цей користувач зареєстрований через Google. Використайте вхід через Google.');
+    }
+
     const isPassEquals = await bcrypt.compare(password, user.password);
     if (!isPassEquals) {
       throw ApiError.BadRequest('Невірний пароль');
