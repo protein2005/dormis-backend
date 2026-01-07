@@ -13,11 +13,11 @@ module.exports = class ApiError extends Error {
   }
 
   static Unauthorized() {
-    return new ApiError(401, 'User is not authorized');
+    return new ApiError(401, 'Користувач не авторизований');
   }
 
   static Forbidden() {
-    return new ApiError(403, 'Access to the resource is forbidden');
+    return new ApiError(403, 'Доступ заборонено');
   }
 
   static NotFound(message) {
