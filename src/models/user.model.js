@@ -6,6 +6,6 @@ const userSchema = new Schema({
   password: { type: String },
   googleId: { type: String },
   avatar: { type: String },
-});
+}, { timestamps: true });
 
 module.exports = model("User", userSchema);
