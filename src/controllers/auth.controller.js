@@ -11,7 +11,7 @@ class AuthController {
         maxAge: 30 * 24 * 60 * 60 * 1000
       });
 
-      res.status(201).json({ accessToken: data.accessToken });
+      res.status(201).json({ user: data.user, accessToken: data.accessToken });
     } catch (error) {
       next(error);
     }
@@ -27,7 +27,16 @@ class AuthController {
         maxAge: 30 * 24 * 60 * 60 * 1000
       });
 
-      res.status(200).json({ accessToken: data.accessToken });
+      res.status(200).json({ user: data.user, accessToken: data.accessToken });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async me(req, res, next) {
+    try {
+      const userData = await AuthService.me(req.user.id);
+      res.status(200).json(userData);
     } catch (error) {
       next(error);
     }

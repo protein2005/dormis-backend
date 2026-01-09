@@ -22,7 +22,7 @@ class AuthService {
     const tokens = TokenService.generateTokens({ ...userDto });
     await TokenService.saveToken(userDto.id, tokens.refreshToken);
 
-    return { ...tokens};
+    return { ...tokens, user: userDto };
   }
 
   async login(email, password) {
@@ -44,7 +44,17 @@ class AuthService {
     const tokens = TokenService.generateTokens({ ...userDto });
     await TokenService.saveToken(userDto.id, tokens.refreshToken);
 
-    return { ...tokens };
+    return { ...tokens, user: userDto };
+  }
+
+  async me(userId) {
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      throw ApiError.BadRequest('Користувача не знайдено');
+    }
+
+    const userDto = new UserDto(user);
+    return userDto;
   }
 
   async googleAuth(user) {

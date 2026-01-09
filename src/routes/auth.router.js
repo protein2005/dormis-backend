@@ -18,6 +18,7 @@ authRouter.post(
   loginValidator,
   validationMiddleware,
   AuthController.login);
+authRouter.get("/me", authMiddleware, AuthController.me);
 authRouter.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
 authRouter.get('/google/callback', passport.authenticate('google', { session: false }), AuthController.googleCallback);
 authRouter.post("/logout", AuthController.logout);
