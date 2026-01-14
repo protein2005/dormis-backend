@@ -5,6 +5,11 @@ const dormitorySchema = new Schema({
   address: { type: String, required: true },
   description: { type: String },
   rules: { type: String },
+  imageUrl: { type: String },
+  files: [{
+    name: { type: String },
+    url: { type: String },
+  }],
   contacts: {
     phone: { type: String },
     email: { type: String },
