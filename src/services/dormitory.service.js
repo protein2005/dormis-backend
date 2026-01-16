@@ -64,6 +64,39 @@ class DormitoryService {
       status
     });
   }
+
+  async getById(dormId) {
+    const dormitory = await DormitoryModel.findById(dormId);
+    if (!dormitory) throw ApiError.BadRequest('Гуртожиток не знайдено');
+    return dormitory;
+  }
+
+  async getMembers(dormId) {
+    const members = await MembershipModel.find({ dormitory: dormId })
+      .populate('user', 'name email avatar')
+      .sort({ role: 1 });
+    return members;
+  }
+
+  async updateMember(dormId, adminId, { membershipId, role, status }) {
+    const requester = await MembershipModel.findOne({ dormitory: dormId, user: adminId });
+    if (!requester || (requester.role !== 'owner' && requester.role !== 'admin')) {
+      throw ApiError.Forbidden('Недостатньо прав для редагування учасників');
+    }
+
+    const membership = await MembershipModel.findById(membershipId);
+    if (!membership) throw ApiError.BadRequest('Учасника не знайдено');
+
+    if (membership.role === 'owner') {
+      throw ApiError.Forbidden('Неможливо змінити роль власника');
+    }
+
+    if (role) membership.role = role;
+    if (status) membership.status = status;
+
+    await membership.save();
+    return membership;
+  }
 }
 
 module.exports = new DormitoryService();

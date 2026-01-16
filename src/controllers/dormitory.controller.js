@@ -19,6 +19,36 @@ class DormitoryController {
       next(e);
     }
   }
+
+  async getOne(req, res, next) {
+    try {
+      const { id } = req.params;
+      const dorm = await DormitoryService.getById(id);
+      return res.json(dorm);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async getMembers(req, res, next) {
+    try {
+      const { id } = req.params;
+      const members = await DormitoryService.getMembers(id);
+      return res.json(members);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async updateMember(req, res, next) {
+    try {
+      const { id } = req.params;
+      const result = await DormitoryService.updateMember(id, req.user.id, req.body);
+      return res.json(result);
+    } catch (e) {
+      next(e);
+    }
+  }
 }
 
 module.exports = new DormitoryController();
