@@ -6,22 +6,21 @@ const dormitorySchema = new Schema({
   description: { type: String },
   rules: { type: String },
   imageUrl: { type: String },
-  files: [{
-    name: { type: String },
-    url: { type: String },
-  }],
-  contacts: {
-    phone: { type: String },
-    email: { type: String },
-    telegram: { type: String }
-  },
+  files: [{ name: String, url: String }],
+  contacts: { phone: String, email: String, telegram: String },
   inviteCode: { type: String, unique: true },
-  joinType: {
-    type: String,
-    enum: ['CODE', 'WHITELIST', 'MODERATION'],
-    default: 'CODE'
+  settlementFields: {
+    inputs: [{
+      name: String,
+      label: String,
+      required: { type: Boolean, default: true }
+    }],
+    requiredFiles: [{
+      name: String,
+      label: String,
+      required: { type: Boolean, default: true }
+    }]
   },
-  whitelist: [{ type: String }],
   owner: { type: Schema.Types.ObjectId, ref: 'User', required: true }
 }, { timestamps: true });
 

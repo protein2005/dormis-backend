@@ -43,7 +43,60 @@ class DormitoryController {
   async updateMember(req, res, next) {
     try {
       const { id } = req.params;
-      const result = await DormitoryService.updateMember(id, req.user.id, req.body);
+      const { membershipId, role, status, roomNumber, comment } = req.body;
+
+      const result = await DormitoryService.updateMember(
+        id,
+        req.user.id,
+        { membershipId, role, status, roomNumber, comment }
+      );
+      return res.json(result);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async updateSettlementSettings(req, res, next) {
+    try {
+      const { id } = req.params;
+      const { settlementFields } = req.body;
+
+      const dorm = await DormitoryService.updateSettlementSettings(id, req.user.id, settlementFields);
+      return res.json(dorm);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async submitSettlement(req, res, next) {
+    try {
+      const { id } = req.params;
+      const result = await DormitoryService.submitSettlement(req.user.id, id, req.body);
+      return res.json(result);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async getRequests(req, res, next) {
+    try {
+      const { id } = req.params;
+      const requests = await DormitoryService.getSettlementRequests(id);
+      return res.json(requests);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async updateRequestStatus(req, res, next) {
+    try {
+      const { requestId } = req.params;
+      const { status, roomNumber, comment } = req.body;
+      const result = await DormitoryService.updateSettlementStatus(
+        requestId,
+        req.user.id,
+        { status, roomNumber, comment }
+      );
       return res.json(result);
     } catch (e) {
       next(e);

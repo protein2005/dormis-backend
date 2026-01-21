@@ -12,6 +12,14 @@ dormitoryRouter.get('/:id/members', authMiddleware, DormitoryController.getMembe
 
 dormitoryRouter.patch('/:id/members', authMiddleware, DormitoryController.updateMember);
 
+dormitoryRouter.patch('/:id/settlement-settings', authMiddleware, DormitoryController.updateSettlementSettings);
+
+dormitoryRouter.post('/:id/settlement-submit', authMiddleware, DormitoryController.submitSettlement);
+
+dormitoryRouter.get('/:id/requests', authMiddleware, DormitoryController.getRequests);
+
+dormitoryRouter.patch('/requests/:requestId/status', authMiddleware, DormitoryController.updateRequestStatus);
+
 module.exports = dormitoryRouter;
 
 module.exports = dormitoryRouter;
