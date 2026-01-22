@@ -1,5 +1,6 @@
 const DormitoryModel = require('../models/dormitory.model');
 const MembershipModel = require('../models/membership.model');
+const SettlementRequestModel = require('../models/settlementRequest.model');
 const crypto = require('crypto');
 const ApiError = require('../exceptions/api.error');
 
@@ -139,6 +140,12 @@ class DormitoryService {
     });
 
     return request;
+  }
+
+  async getUserRequests(userId) {
+    return await SettlementRequestModel.find({ user: userId })
+      .populate('dormitory', 'name address')
+      .sort({ createdAt: -1 });
   }
 
   async getSettlementRequests(dormId) {

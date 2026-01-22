@@ -7,6 +7,8 @@ const dormitoryRouter = new Router();
 dormitoryRouter.post('/create', authMiddleware, DormitoryController.create);
 dormitoryRouter.post('/join', authMiddleware, DormitoryController.join);
 
+dormitoryRouter.get('/my-requests', authMiddleware, DormitoryController.getMyRequests);
+
 dormitoryRouter.get('/:id', authMiddleware, DormitoryController.getOne);
 dormitoryRouter.get('/:id/members', authMiddleware, DormitoryController.getMembers);
 

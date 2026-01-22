@@ -78,6 +78,15 @@ class DormitoryController {
     }
   }
 
+  async getMyRequests(req, res, next) {
+    try {
+      const requests = await DormitoryService.getUserRequests(req.user.id);
+      return res.json(requests);
+    } catch (e) {
+      next(e);
+    }
+  }
+
   async getRequests(req, res, next) {
     try {
       const { id } = req.params;
