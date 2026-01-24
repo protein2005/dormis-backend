@@ -3,8 +3,8 @@ const AuthService = require('../services/auth.service');
 class AuthController {
   async register(req, res, next) {
     try {
-      const { fullName, email, password } = req.body;
-      const data = await AuthService.register(fullName, email, password);
+      const { fullName, email, password, gender } = req.body;
+      const data = await AuthService.register(fullName, email, password, gender);
 
       res.cookie('refreshToken', data.refreshToken, {
         httpOnly: true,

@@ -1,11 +1,12 @@
 const UserModel = require('../models/user.model');
+const MembershipModel = require('../models/membership.model');
 const bcrypt = require('bcrypt');
 const UserDto = require('../dtos/user.dto');
 const TokenService = require('./token.service');
 const ApiError = require('../exceptions/api.error');
 
 class AuthService {
-  async register(fullName, email, password) {
+  async register(fullName, email, password, gender) {
     const candidate = await UserModel.findOne({ email });
     if (candidate) {
       throw ApiError.BadRequest('Користувач з таким email вже існує');
@@ -15,6 +16,7 @@ class AuthService {
     const user = await UserModel.create({
       fullName,
       email,
+      gender,
       password: hashedPassword
     });
 
@@ -53,8 +55,16 @@ class AuthService {
       throw ApiError.BadRequest('Користувача не знайдено');
     }
 
+    const memberships = await MembershipModel.find({
+      user: userId,
+      status: { $in: ['active', 'pending', 'joined'] }
+    }).populate('dormitory');
+
     const userDto = new UserDto(user);
-    return userDto;
+    return {
+      user: userDto,
+      memberships: memberships || []
+    };
   }
 
   async googleAuth(user) {
