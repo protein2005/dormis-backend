@@ -18,7 +18,7 @@ const settlementRequestSchema = new Schema({
   },
   status: {
     type: String,
-    enum: ['pending', 'approved', 'rejected', 'cancelled'],
+    enum: ['pending', 'approved', 'rejected', 'cancelled', 'resubmitted'],
     default: 'pending'
   },
   responses: [{

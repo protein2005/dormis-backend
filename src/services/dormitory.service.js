@@ -150,7 +150,7 @@ class DormitoryService {
 
   async getSettlementRequests(dormId) {
     return await SettlementRequestModel.find({ dormitory: dormId })
-      .populate('user', 'fullName email avatar')
+      .populate('user', 'fullName email gender avatar')
       .sort({ createdAt: -1 });
   }
 
