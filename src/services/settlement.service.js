@@ -58,7 +58,7 @@ class SettlementService {
     request.logs.push({
       action: status,
       admin: adminId,
-      comment: comment || `Статус змінено на ${status}`
+      comment: comment || `Вас заселено до гуртожитку`
     });
 
     await request.save();
