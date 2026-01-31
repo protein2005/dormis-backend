@@ -1,5 +1,6 @@
 const SettlementRequestModel = require('../models/settlementRequest.model');
 const MembershipModel = require('../models/membership.model');
+const RoomModel = require('../models/room.model');
 const ApiError = require('../exceptions/api.error');
 
 class SettlementService {
@@ -49,16 +50,17 @@ class SettlementService {
       .sort({ createdAt: -1 });
   }
 
-  async updateStatus(requestId, adminId, { status, roomNumber, comment }) {
+  async updateStatus(requestId, adminId, { status, roomId, roomNumber, comment }) {
     const request = await SettlementRequestModel.findById(requestId);
-    if (!request) throw ApiError.BadRequest('Заявку не знайдено'); //
+    if (!request) throw ApiError.BadRequest('Заявку не знайдено');
 
     request.status = status;
     if (roomNumber) request.roomNumber = roomNumber;
+
     request.logs.push({
       action: status,
       admin: adminId,
-      comment: comment || `Вас заселено до гуртожитку`
+      comment: comment || `Cтатус змінено на ${status}`
     });
 
     await request.save();
@@ -68,6 +70,23 @@ class SettlementService {
         status: 'active',
         roomNumber: roomNumber
       });
+
+      if (roomId) {
+        const room = await RoomModel.findById(roomId);
+
+        if (room) {
+          const isAlreadyResident = room.residents.some(id => id.toString() === request.user.toString());
+
+          if (!isAlreadyResident) {
+            if (room.residents.length < room.capacity) {
+              room.residents.push(request.user);
+              await room.save();
+            } else {
+              throw ApiError.BadRequest(`У кімнаті №${roomNumber} немає вільних місць`);
+            }
+          }
+        }
+      }
     }
 
     return request;
