@@ -20,6 +20,10 @@ const membershipSchema = new Schema({
     enum: ['joined', 'active', 'banned'],
     default: 'joined'
   },
+  room: {
+    type: Schema.Types.ObjectId,
+    ref: 'Room'
+  },
   roomNumber: {
     type: String
   },

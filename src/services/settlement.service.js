@@ -60,7 +60,7 @@ class SettlementService {
     request.logs.push({
       action: status,
       admin: adminId,
-      comment: comment || `Cтатус змінено на ${status}`
+      comment: comment || `Статус змінено на ${status}`
     });
 
     await request.save();
@@ -68,6 +68,7 @@ class SettlementService {
     if (status === 'approved') {
       await MembershipModel.findByIdAndUpdate(request.membership, {
         status: 'active',
+        room: roomId,
         roomNumber: roomNumber
       });
 

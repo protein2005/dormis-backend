@@ -58,7 +58,13 @@ class AuthService {
     const memberships = await MembershipModel.find({
       user: userId,
       status: { $in: ['active', 'pending', 'joined'] }
-    }).populate('dormitory');
+    }).populate('dormitory').populate({
+        path: 'room',
+        populate: {
+          path: 'residents',
+          select: 'fullName avatar gender'
+        }
+      });
 
     const userDto = new UserDto(user);
     return {
